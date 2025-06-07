@@ -15,12 +15,12 @@ struct VigilantFinalApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(appModel)
+                .environmentObject(appModel)
         }
 
         ImmersiveSpace(id: appModel.immersiveSpaceID) {
             ImmersiveView()
-                .environment(appModel)
+                .environmentObject(appModel)  // Asegúrate que es así, no .environment(appModel)
                 .onAppear {
                     appModel.immersiveSpaceState = .open
                 }
