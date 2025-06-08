@@ -48,22 +48,28 @@ struct MainMenuView: View {
 struct MenuItemView: View {
     var label: String
     var imageName: String
+    var action: (() -> Void)? = nil
 
     var body: some View {
-        VStack(spacing: 4) {
-            Image(imageName)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 580, height: 180)
+        Button(action: {
+            action?()
+        }) {
+            VStack(spacing: 4) {
+                Image(imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 580, height: 180)
 
-            Text(label)
-                .font(.footnote)
-                .foregroundColor(.black)
+                Text(label)
+                    .font(.footnote)
+                    .foregroundColor(.black)
+            }
+            .frame(width: 220, height: 220)
+            .background(Color.white)
+            .cornerRadius(20)
+            .shadow(color: .gray.opacity(0.2), radius: 8, x: 0, y: 5)
         }
-        .frame(width: 220, height: 220)
-        .background(Color.white)
-        .cornerRadius(20)
-        .shadow(color: .gray.opacity(0.2), radius: 8, x: 0, y: 5)
+        .buttonStyle(PlainButtonStyle()) // elimina el efecto de botón azul
     }
 }
 

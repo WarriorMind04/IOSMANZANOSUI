@@ -51,6 +51,7 @@ struct FileExplorerView: View {
                 Text("FILES")
                     .font(.title2)
                     .bold()
+                    .foregroundColor(.black)
             }
             .padding(.bottom, 8)
             
@@ -62,7 +63,7 @@ struct FileExplorerView: View {
             
             Text("Project 1")
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundColor(.black)
             
             ForEach(projectFiles) { file in
                 fileRow(file)
@@ -78,7 +79,7 @@ struct FileExplorerView: View {
     func fileRow(_ file: FileItem) -> some View {
         HStack {
             Label(file.name, systemImage: file.icon)
-                .foregroundColor(.primary)
+                .foregroundColor(.black)
             Spacer()
             if file.hasDetail {
                 Text("")

@@ -13,30 +13,55 @@ struct ContentView: View {
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
     @EnvironmentObject private var appModel: AppModel
+    @State private var selectedTab: TabItem = .home
 
     var body: some View {
-        VStack {
-            Model3D(named: "Scene", bundle: realityKitContentBundle)
-                .padding(.bottom, 50)
+        NavigationStack {
+            ZStack {
+                Color.white.ignoresSafeArea()
+                Image("background")
+                    .resizable()
+                    .scaledToFill()
+                    .ignoresSafeArea()
 
-            Text("Hello, world!")
+                VStack(spacing: 40) {
+                    NavBar(selectedTab: $selectedTab)
 
-            Button("Entrar a vista inmersiva") {
-                Task {
-                    await openImmersiveSpace(id: appModel.immersiveSpaceID)
+                    VStack(spacing: 30) {
+                        HStack(spacing: 30) {
+                            // ✅ Assembly abre vista inmersiva
+                            MenuItemView(label: "Assembly", imageName: "logo2") {
+                                Task {
+                                    await openImmersiveSpace(id: appModel.immersiveSpaceID)
+                                }
+                            }
+
+                            MenuItemView(label: "FEM", imageName: "logo")
+                            MenuItemView(label: "Settings", imageName: "engrane")
+                        }
+
+                        HStack(spacing: 30) {
+                            NavigationLink(destination: UserInfoView()) {
+                                MenuItemView(label: "User", imageName: "user")
+                            }
+
+                            MenuItemView(label: "Tutorials", imageName: "tutorialicon")
+                        }
+                    }
+
+                    Spacer()
+
+                    // Opcional: botón para salir de inmersiva
+                    Button("Salir de vista inmersiva") {
+                        Task {
+                            await dismissImmersiveSpace()
+                        }
+                    }
+                    .padding(.bottom, 20)
                 }
+                .padding(.top, 50)
             }
-
-            Button("Salir de vista inmersiva") {
-                Task {
-                    await dismissImmersiveSpace()
-                }
-            }
-
-            ToggleImmersiveSpaceButton()
-                
         }
-        .padding()
     }
 }
 

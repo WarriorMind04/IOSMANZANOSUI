@@ -28,7 +28,7 @@ struct FEMOptionsView: View {
                 Spacer()
 
                 HStack(spacing: 32) {
-                    femOptionCard(imageName: "docicon", label: "Import FEM")
+                    femOptionCard(imageName: "uploadicon", label: "Import FEM")
                     femOptionCard(imageName: "plus", label: "Create FEM", isSystemIcon: true)
                 }
                 .frame(maxWidth: 600)
@@ -57,7 +57,8 @@ struct FEMOptionsView: View {
 
             Text(label)
                 .font(.headline)
-                .foregroundColor(.primary)
+                .foregroundColor(.black)
+                
         }
         .frame(maxWidth: .infinity, minHeight: 180)
         .padding()
