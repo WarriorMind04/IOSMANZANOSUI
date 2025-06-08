@@ -31,7 +31,7 @@ struct FEMOptionsView: View {
                     femOptionCard(imageName: "uploadicon", label: "Import FEM")
                     femOptionCard(imageName: "plus", label: "Create FEM", isSystemIcon: true)
                 }
-                .frame(maxWidth: 600)
+                .frame(maxWidth: 800)
                 .padding(.horizontal)
 
                 Spacer()

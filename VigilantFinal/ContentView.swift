@@ -27,31 +27,20 @@ struct ContentView: View {
                 VStack(spacing: 40) {
                     NavBar(selectedTab: $selectedTab)
 
-                    VStack(spacing: 30) {
-                        HStack(spacing: 30) {
-                            // ✅ Assembly abre vista inmersiva
-                            MenuItemView(label: "Assembly", imageName: "logo2") {
-                                Task {
-                                    await openImmersiveSpace(id: appModel.immersiveSpaceID)
-                                }
-                            }
-
-                            MenuItemView(label: "FEM", imageName: "logo")
-                            MenuItemView(label: "Settings", imageName: "engrane")
-                        }
-
-                        HStack(spacing: 30) {
-                            NavigationLink(destination: UserInfoView()) {
-                                MenuItemView(label: "User", imageName: "user")
-                            }
-
-                            MenuItemView(label: "Tutorials", imageName: "tutorialicon")
-                        }
+                    // ✅ Mostrar contenido según tab seleccionada
+                    switch selectedTab {
+                    case .home:
+                        HomeMenuView()
+                    case .importData:
+                        ImportView()
+                    case .present:
+                        SettingsView()
+                    case .tutorials:
+                        HomeMenuView()
                     }
 
                     Spacer()
 
-                    // Opcional: botón para salir de inmersiva
                     Button("Salir de vista inmersiva") {
                         Task {
                             await dismissImmersiveSpace()
@@ -62,6 +51,41 @@ struct ContentView: View {
                 .padding(.top, 50)
             }
         }
+    }
+
+    // Subvista para Home
+    @ViewBuilder
+    func HomeMenuView() -> some View {
+        VStack(spacing: 30) {
+            HStack(spacing: 30) {
+                MenuItemView(label: "Assembly", imageName: "logo2") {
+                    Task {
+                        await openImmersiveSpace(id: appModel.immersiveSpaceID)
+                    }
+                }
+                MenuItemView(label: "FEM", imageName: "logo")
+                MenuItemView(label: "Settings", imageName: "engrane")
+            }
+
+            HStack(spacing: 30) {
+                NavigationLink(destination: UserInfoView()) {
+                    MenuItemView(label: "User", imageName: "user")
+                }
+                MenuItemView(label: "Tutorials", imageName: "tutorialicon")
+            }
+        }
+    }
+
+    // Subvista para FEM
+    func ImportView() -> some View {
+        FEMOptionsView()
+    }
+
+    // Subvista para Settings
+    func SettingsView() -> some View {
+        Text("Vista de configuración")
+            .font(.largeTitle)
+            .padding()
     }
 }
 
