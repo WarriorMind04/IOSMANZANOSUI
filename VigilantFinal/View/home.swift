@@ -10,88 +10,63 @@ import SwiftUI
 struct MainMenuView: View {
     var body: some View {
         ZStack {
-            // Fondo blanco con imagen decorativa
+            // Fondo decorativo
             Color.white.ignoresSafeArea()
-            Image("ae70a177-0d19-430a-b509-0f13db2ddf2f")
+            Image("background") // asegúrate de que sea similar al swirl de colores
                 .resizable()
-                .scaledToFit()
-                .opacity(0.5)
-                .offset(x: 100, y: 100)
+                .scaledToFill()
+                .ignoresSafeArea()
+                .opacity(0.3)
 
-            VStack(spacing: 30) {
+            VStack(spacing: 40) {
                 // Barra superior
-                HStack(spacing: 20) {
-                    Image(systemName: "rectangle.on.rectangle")
-                        .padding(.leading, 20)
+                NavBar()
 
-                    Spacer()
-
-                    Text("HOME")
-                        .font(.headline)
-                        .foregroundColor(.cyan)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 6)
-                        .background(Capsule().fill(Color.white))
-                        .overlay(
-                            Capsule().stroke(Color.cyan, lineWidth: 2)
-                        )
-
-                    Text("Import")
-                    Text("Present")
-                    Text("Tutorials")
-
-                    Spacer()
-
-                    Image(systemName: "magnifyingglass")
-                        .padding(.trailing, 20)
-                }
-                .padding(.top, 20)
-
-                // Contenedor de íconos
-                VStack(spacing: 20) {
-                    HStack(spacing: 20) {
-                        MenuItemView(iconName: "link", label: "Assembly", customImage: "assembly")
-                        MenuItemView(iconName: "link.badge.plus", label: "FEM", customImage: "fem")
-                        MenuItemView(iconName: "gearshape", label: "Settings", customImage: "settings")
+                // Menú principal
+                VStack(spacing: 30) {
+                    HStack(spacing: 30) {
+                        MenuItemView(label: "Assembly", imageName: "logo2")
+                        MenuItemView(label: "FEM", imageName: "logo")
+                        MenuItemView(label: "Settings", imageName: "engrane")
                     }
-
-                    HStack(spacing: 20) {
-                        MenuItemView(iconName: "person.crop.circle", label: "User", customImage: "user")
-                        MenuItemView(iconName: "book.fill", label: "Tutorials", customImage: "tutorials")
+                    HStack(spacing: 30) {
+                        MenuItemView(label: "User", imageName: "user")
+                        MenuItemView(label: "Tutorials", imageName: "tutorialicon")
                     }
                 }
+
                 Spacer()
             }
+            .padding(.top, 50)
         }
     }
 }
+
+
+
+
 
 struct MenuItemView: View {
-    var iconName: String
     var label: String
-    var customImage: String
+    var imageName: String
 
     var body: some View {
-        VStack(spacing: 10) {
-            Image(customImage)
+        VStack(spacing: 12) {
+            Image(imageName)
                 .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 60, height: 60)
+                .scaledToFit()
+                .frame(width: 280, height: 280)
 
             Text(label)
-                .font(.subheadline)
+                .font(.footnote)
                 .foregroundColor(.black)
         }
-        .frame(width: 120, height: 120)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.white)
-                .shadow(radius: 5)
-        )
+        .frame(width: 220, height: 220)
+        .background(Color.white)
+        .cornerRadius(20)
+        .shadow(color: .gray.opacity(0.2), radius: 8, x: 0, y: 5)
     }
 }
-
-
 
 #Preview {
     MainMenuView()
