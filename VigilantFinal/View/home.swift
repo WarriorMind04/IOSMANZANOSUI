@@ -16,7 +16,7 @@ struct MainMenuView: View {
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea()
-                .opacity(0.3)
+                
 
             VStack(spacing: 40) {
                 // Barra superior
@@ -51,11 +51,11 @@ struct MenuItemView: View {
     var imageName: String
 
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 4) {
             Image(imageName)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 280, height: 280)
+                .frame(width: 580, height: 180)
 
             Text(label)
                 .font(.footnote)
