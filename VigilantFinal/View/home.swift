@@ -8,43 +8,42 @@
 import SwiftUI
 
 struct MainMenuView: View {
+    @State private var selectedTab: TabItem = .home
+
     var body: some View {
-        ZStack {
-            // Fondo decorativo
-            Color.white.ignoresSafeArea()
-            Image("background") // asegúrate de que sea similar al swirl de colores
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-                
+        NavigationStack { // ✅ Navegación
+            ZStack {
+                Color.white.ignoresSafeArea()
+                Image("background")
+                    .resizable()
+                    .scaledToFill()
+                    .ignoresSafeArea()
+                    .cornerRadius(25)
 
-            VStack(spacing: 40) {
-                // Barra superior
-                NavBar()
+                VStack(spacing: 40) {
+                    NavBar(selectedTab: $selectedTab)
 
-                // Menú principal
-                VStack(spacing: 30) {
-                    HStack(spacing: 30) {
-                        MenuItemView(label: "Assembly", imageName: "logo2")
-                        MenuItemView(label: "FEM", imageName: "logo")
-                        MenuItemView(label: "Settings", imageName: "engrane")
+                    VStack(spacing: 30) {
+                        HStack(spacing: 30) {
+                            MenuItemView(label: "Assembly", imageName: "logo2")
+                            MenuItemView(label: "FEM", imageName: "logo")
+                            MenuItemView(label: "Settings", imageName: "engrane")
+                        }
+                        HStack(spacing: 30) {
+                            NavigationLink(destination: UserInfoView()) {
+                                MenuItemView(label: "User", imageName: "user")
+                            }
+                            MenuItemView(label: "Tutorials", imageName: "tutorialicon")
+                        }
                     }
-                    HStack(spacing: 30) {
-                        MenuItemView(label: "User", imageName: "user")
-                        MenuItemView(label: "Tutorials", imageName: "tutorialicon")
-                    }
+
+                    Spacer()
                 }
-
-                Spacer()
+                .padding(.top, 50)
             }
-            .padding(.top, 50)
         }
     }
 }
-
-
-
-
 
 struct MenuItemView: View {
     var label: String

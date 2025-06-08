@@ -9,6 +9,7 @@ import SwiftUI
 
 struct UserInfoView: View {
     @StateObject private var viewModel = UserInfoViewModel()
+    @State private var selectedTab: TabItem = .home // ✅ Agregado
 
     var body: some View {
         ZStack {
@@ -22,7 +23,7 @@ struct UserInfoView: View {
             // Contenido scrollable
             ScrollView {
                 VStack(spacing: 20) {
-                    NavBar() // Menú superior
+                    NavBar(selectedTab: $selectedTab) // ✅ Corregido
 
                     UserInfoCardView(viewModel: viewModel)
                         .padding(.top, 10)
@@ -32,7 +33,6 @@ struct UserInfoView: View {
         }
     }
 }
-
 
 #Preview {
     UserInfoView()

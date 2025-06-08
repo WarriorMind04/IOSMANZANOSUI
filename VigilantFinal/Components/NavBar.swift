@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct NavBar: View {
+    @Binding var selectedTab: TabItem
+
     var body: some View {
         HStack(spacing: 25) {
             Image(systemName: "rectangle.on.rectangle")
@@ -16,10 +18,11 @@ struct NavBar: View {
 
             Spacer()
 
-            CapsuleTab(text: "HOME", isSelected: true)
-            CapsuleTab(text: "Import")
-            CapsuleTab(text: "Present")
-            CapsuleTab(text: "Tutorials")
+            ForEach(TabItem.allCases, id: \.self) { tab in
+                CapsuleTab(text: tab.rawValue, isSelected: selectedTab == tab) {
+                    selectedTab = tab
+                }
+            }
 
             Spacer()
 
@@ -38,7 +41,8 @@ struct NavBar: View {
 
 struct CapsuleTab: View {
     var text: String
-    var isSelected: Bool = false
+    var isSelected: Bool
+    var action: () -> Void
 
     var body: some View {
         Text(text)
@@ -46,15 +50,16 @@ struct CapsuleTab: View {
             .foregroundColor(isSelected ? .white : .black)
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
-            .background(isSelected ? Color.cyan : Color.white.opacity(0.8))
+            .background(isSelected ? Color.cyan.opacity(0.8) : Color.white.opacity(0.3))
             .clipShape(Capsule())
             .overlay(
                 Capsule().stroke(Color.cyan.opacity(0.5), lineWidth: isSelected ? 0 : 1)
             )
+            .onTapGesture {
+                action()
+            }
     }
 }
 
 
-#Preview {
-    NavBar()
-}
+
