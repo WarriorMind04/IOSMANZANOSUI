@@ -5,12 +5,12 @@
 //  Created by Jose Miguel Guerrero Jiménez on 07/06/25.
 //
 
+
 import SwiftUI
 
 struct ToggleImmersiveSpaceButton: View {
 
-    @EnvironmentObject private var appModel: AppModel  // ✅ CORREGIDO
-
+    @EnvironmentObject private var appModel: AppModel
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
 
@@ -18,32 +18,41 @@ struct ToggleImmersiveSpaceButton: View {
         Button {
             Task { @MainActor in
                 switch appModel.immersiveSpaceState {
-                case .open:
-                    appModel.immersiveSpaceState = .inTransition
-                    await dismissImmersiveSpace()
-                    // No se marca como `.closed` aquí para evitar conflictos con `.onDisappear`.
+                    case .open:
+                        appModel.immersiveSpaceState = .inTransition
+                        await dismissImmersiveSpace()
+                        // Don't set immersiveSpaceState to .closed because there
+                        // are multiple paths to ImmersiveView.onDisappear().
+                        // Only set .closed in ImmersiveView.onDisappear().
 
-                case .closed:
-                    appModel.immersiveSpaceState = .inTransition
-                    switch await openImmersiveSpace(id: appModel.immersiveSpaceID) {
-                    case .opened:
-                        // No se marca como `.open` aquí para evitar conflictos con `.onAppear`.
+                    case .closed:
+                        appModel.immersiveSpaceState = .inTransition
+                        switch await openImmersiveSpace(id: appModel.immersiveSpaceID) {
+                            case .opened:
+                                // Don't set immersiveSpaceState to .open because there
+                                // may be multiple paths to ImmersiveView.onAppear().
+                                // Only set .open in ImmersiveView.onAppear().
+                                break
+
+                            case .userCancelled, .error:
+                                // On error, we need to mark the immersive space
+                                // as closed because it failed to open.
+                                fallthrough
+                            @unknown default:
+                                // On unknown response, assume space did not open.
+                                appModel.immersiveSpaceState = .closed
+                        }
+
+                    case .inTransition:
+                        // This case should not ever happen because button is disabled for this case.
                         break
-                    case .userCancelled, .error:
-                        fallthrough
-                    @unknown default:
-                        appModel.immersiveSpaceState = .closed
-                    }
-
-                case .inTransition:
-                    // No se debe poder presionar el botón en este estado.
-                    break
                 }
             }
         } label: {
-            Text(appModel.immersiveSpaceState == .open ? "Ocultar Vista Inmersiva" : "Mostrar Vista Inmersiva")
+            Text(appModel.immersiveSpaceState == .open ? "Hide Immersive Space" : "Show Immersive Space")
         }
         .disabled(appModel.immersiveSpaceState == .inTransition)
+        .animation(.none, value: 0)
         .fontWeight(.semibold)
     }
 }

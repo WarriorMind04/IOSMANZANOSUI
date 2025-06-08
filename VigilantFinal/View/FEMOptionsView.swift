@@ -6,13 +6,15 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct FEMOptionsView: View {
     @State private var selectedTab: TabItem = .home
+    @State private var isImportingFEM = false
+    @State private var importedFileURL: URL?
 
     var body: some View {
         ZStack {
-            // Fondo neutro para pruebas
             Color(.systemBackground)
                 .ignoresSafeArea()
             Image("background")
@@ -28,13 +30,35 @@ struct FEMOptionsView: View {
                 Spacer()
 
                 HStack(spacing: 32) {
-                    femOptionCard(imageName: "uploadicon", label: "Import FEM")
+                    // ✅ Import FEM
+                    Button(action: {
+                        isImportingFEM = true
+                    }) {
+                        femOptionCard(imageName: "uploadicon", label: "Import FEM")
+                    }
+
+                    // Create FEM (no cambia)
                     femOptionCard(imageName: "plus", label: "Create FEM", isSystemIcon: true)
                 }
                 .frame(maxWidth: 800)
                 .padding(.horizontal)
 
                 Spacer()
+            }
+        }
+        // ✅ File Importer para .usdc
+        .fileImporter(
+            isPresented: $isImportingFEM,
+            allowedContentTypes: [UTType(filenameExtension: "usdc")!],
+            allowsMultipleSelection: false
+        ) { result in
+            do {
+                guard let selectedFile: URL = try result.get().first else { return }
+                importedFileURL = selectedFile
+                print("Archivo importado: \(selectedFile)")
+                // Aquí puedes procesar el archivo o cargarlo
+            } catch {
+                print("Error al importar el archivo: \(error.localizedDescription)")
             }
         }
     }
@@ -58,7 +82,6 @@ struct FEMOptionsView: View {
             Text(label)
                 .font(.headline)
                 .foregroundColor(.black)
-                
         }
         .frame(maxWidth: .infinity, minHeight: 180)
         .padding()
