@@ -36,7 +36,7 @@ struct ContentView: View {
                     case .present:
                         SettingsView()
                     case .tutorials:
-                        HomeMenuView()
+                        TutoView()
                     }
 
                     Spacer()
@@ -86,6 +86,10 @@ struct ContentView: View {
         Text("Vista de configuración")
             .font(.largeTitle)
             .padding()
+    }
+    
+    func TutoView() -> some View{
+        TutorialsView()
     }
 }
 

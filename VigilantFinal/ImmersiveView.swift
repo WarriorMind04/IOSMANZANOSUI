@@ -22,7 +22,7 @@ struct ImmersiveView: View {
 
             // Cargar múltiples piezas
             for (index, nombre) in piezas.enumerated() {
-                if let url = Bundle.main.url(forResource: nombre, withExtension: "usdz") {
+                if let url = Bundle.main.url(forResource: nombre, withExtension: "usdc") {
                     do {
                         let entity = try await Entity(contentsOf: url)
                         if let model = findModelEntity(in: entity) {
@@ -44,7 +44,7 @@ struct ImmersiveView: View {
                         print("Error al cargar \(nombre): \(error)")
                     }
                 } else {
-                    print("No se encontró el archivo \(nombre).usdz")
+                    print("No se encontró el archivo \(nombre).usdc")
                 }
             }
 
